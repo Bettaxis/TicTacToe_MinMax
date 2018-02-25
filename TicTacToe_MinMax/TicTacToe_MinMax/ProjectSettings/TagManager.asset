@@ -4,8 +4,16 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Door
   - Script Object
+  - TopLeft
+  - TopMiddle
+  - TopRight
+  - MiddleLeft
+  - MiddleRight
+  - MiddleMiddle
+  - BottomLeft
+  - BottomRight
+  - BottomMiddle
   layers:
   - Default
   - TransparentFX

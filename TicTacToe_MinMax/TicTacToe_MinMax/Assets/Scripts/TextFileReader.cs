@@ -4,7 +4,7 @@ using UnityEngine;
 using System.IO;
 using UnityEngine.UI;
 using System;
-using SFB;
+
 
 //Enums to represent what the index in percentages list corresponds to.
 //enum Doors
@@ -20,6 +20,7 @@ using SFB;
 //    Door_Selected = 8,
 //};
 
+   /*
 public class TextFileReader : MonoBehaviour
 {
     public Text textUI; // Link to textUI element
@@ -46,7 +47,7 @@ public class TextFileReader : MonoBehaviour
             reader.Close();
         }
     }
-
+    
     //Function to open a file dialog from button press and output the text to a UI element
     public void LoadInfo()
     {
@@ -102,3 +103,4 @@ public class TextFileReader : MonoBehaviour
            Application.Quit();
     }
 }
+*/
