@@ -14,6 +14,7 @@ public class Space : MonoBehaviour
     public Sprite BlueX;
     public Sprite BlueO;
 
+    public Text winText;
 
     public GameObject ScriptObject;
     private TicTacToeLogic logicScript;
@@ -34,11 +35,20 @@ public class Space : MonoBehaviour
 		
 	}
 
+    void LateUpdate()
+    {
+        if (logicScript.playerTurn == false && logicScript.gameStart == true)
+        {
+            logicScript.aiAction();
+            logicScript.playerTurn = true;
+        }
+    }
+
     public void click()
     {
         if(logicScript.playerTurn == true)
         {
-             if(logicScript.XO == false)
+             if(TicTacToeLogic.XO == false)
              {
              this.GetComponent<Image>().sprite = BlueX;
              this.GetComponent<Image>().color = blue;
@@ -88,9 +98,11 @@ public class Space : MonoBehaviour
                     {
                         logicScript.positions[8] = 0;
                     }
-             }
 
-             if(logicScript.XO == true)
+                logicScript.playerTurn = false;
+            }
+
+             if(TicTacToeLogic.XO == true)
              {
              this.GetComponent<Image>().sprite = BlueO;
              this.GetComponent<Image>().color = blue;
@@ -139,13 +151,21 @@ public class Space : MonoBehaviour
                 {
                     logicScript.positions[8] = 1;
                 }
-             }
 
-            if (logicScript.win() == 1)
-                Debug.Log("X Wins!");
+                logicScript.playerTurn = false;
+            }
 
-            else if (logicScript.win() == -1)
-                Debug.Log("O Wins!");
+
+
+            if (TicTacToeLogic.win(logicScript.positions) == 1)
+            {
+                winText.text = "X Wins!";
+            }
+
+            else if (TicTacToeLogic.win(logicScript.positions) == -1)
+            {
+                winText.text = "O Wins!";
+            }
         }
     }
 }

@@ -28,41 +28,190 @@ enum TicTacToe
 // Uses a class to represent each Move
 public class Move
 {
-    // 0 = Min, 1 = Max
+    // False = Min, True = Max
     private bool minMax = false;
 
     private int score = 0;
 
-    //False = X, True = O
-    public bool XorO = false;
+    private int depth = 0;
+    private int depthLevel = 0;
 
-    public Move()
+    public int[] positionsTemp = { 0 };
+
+    //Int to keep track of which node changed
+    public int changedIndex = -1;
+
+
+    public List<Move> boardStates = new List<Move>();
+
+    public Move(int[] p, bool minMaxTemp, int d)
     {
+        positionsTemp = p;
+        minMax = minMaxTemp;
+
+        depth = d;
+        // False = Player X, 
+        // True = Player O 
+        switch (TicTacToeLogic.win(positionsTemp))
+        {
+            //X Wins
+             case 1:
+                if (TicTacToeLogic.XO == false)
+                {
+                    score = -10 + depth;
+                    break;
+                }
+   
+                else
+                {
+                    score = 10 - depth;
+                    break;
+                }
+
+            //O Wins
+            case -1:
+                if (TicTacToeLogic.XO == true)
+                {
+                    score = -10 + depth;
+                    break;
+                }
+
+                else
+                {
+                    score = 10 - depth;
+                    break;
+                }
+
+            // Draw or Neither
+            case 0:
+                if (TicTacToeLogic.isDraw(positionsTemp))
+                {
+                    score = 0;
+                }
+     
+                else
+                {
+                    for (int i = 0; i < 9; i++)
+                    {
+                        if (positionsTemp[i] == -1)
+                        {
+                            int[] positionsToSend = new int[9];
+                            System.Array.Copy(positionsTemp, positionsToSend, 9);
+
+                            // False = Player X, 
+                            // True = Player O 
+                      
+                            //Positions -1 is Empty
+                            //Positions 0 is an X
+                            //Positions 1  is an O
+
+            
+                            if (TicTacToeLogic.XO)
+                            {
+                         
+                                if (minMax)
+                                {
+                                    positionsToSend[i] = 0;
+                                }
+
+                                else
+                                {
+                                    positionsToSend[i] = 1;
+                                }
+                            }
+
+                            else 
+                            {
+
+                                if (minMax)
+                                {
+                                    positionsToSend[i] = 1;
+                                }
+
+                                else
+                                {
+                                    positionsToSend[i] = 0;
+                                }
+                            }
+
+                            Move tempMove = new Move(positionsToSend, !minMax, depth+1);
+                            tempMove.changedIndex = i;
+                            boardStates.Add(tempMove);
+                        }
+                    }
+
+                    Move winningNode = getWinningMove();
+                    score = winningNode.score;
+                    depthLevel = winningNode.depth;
+                }
+                  break; 
+        }
+
 
     }
-
-    public Move(int s)
+    
+    //Function to For Loop through BoardStates to Choose Best/Worst Move
+    public Move getWinningMove()//bool lastLevel)
     {
-        score = s;
+        Move winningMove = boardStates[0];
+
+        for (int i = 1; i < boardStates.Count; i++)
+        {
+
+            if (minMax) // False = Min, True = Max
+            {
+                if (boardStates[i].getScore() > winningMove.getScore())
+                {
+                    winningMove = boardStates[i];
+                }
+            }
+
+            else
+            {
+                if (boardStates[i].getScore() < winningMove.getScore())
+                {
+                    winningMove = boardStates[i];
+                }
+            }
+        }
+        return winningMove;
     }
 
+    public int getScore()
+    {
+        return score;
+    }
 
+    public int getFinalScore()
+    {
+        return score - depthLevel;
+    }
 
 }
 
 public class TicTacToeLogic : MonoBehaviour
 {
-    //Create initial array for boardstate
-    Move[] boardStates = new Move[8];
+    //References to Sprites to Use
+    public Sprite RedX;
+    public Sprite RedO;
+
+    public Sprite BlueX;
+    public Sprite BlueO;
+
+    private Color blue = Color.blue;
+    private Color red = Color.red;
 
     //Array to represent board positions
     public int[] positions = {-1,-1,-1,-1,-1,-1,-1,-1,-1};
 
-    // 0 = Player X, 1 = Player O 
-    public bool XO = false;
+    // False = Player X, 
+    // True = Player O 
+    public static bool XO = false;
 
     // 1 = Player Turn, 0 = AI Turn 
     public bool playerTurn = true;
+
+    public bool gameStart = false;
 
 
     public ParticleSystem placementParticle;
@@ -86,35 +235,53 @@ public class TicTacToeLogic : MonoBehaviour
             Application.Quit();
     }
 
+    public static bool isDraw(int[] p)
+    {
+        //Positions -1 is Empty
+        //Positions 0 is an X
+        //Positions 1  is an O
+        for (int i = 0; i < 9; i++)
+        {
+            if (p[i] == -1)
+            {
+                return false;
+            }
+        }
+    
+        return true;
+    }
+
     public void SetX()
     {
         XO = false;
         playerTurn = true;
+        gameStart = true;
     }
 
     public void SetO()
     {
         XO = true;
-        playerTurn = true;
+        playerTurn = false;
+        gameStart = true;
     }
 
     //Function to calculate which move is the best
-    public int utilityBoardState(/*Move m*/)
+    public static int utilityBoardState(Move m)
     {
         //Results in X Winning
-        if (win() == 1)
+        if (win(m.positionsTemp) == 1)
         {
             return 10;
         }
 
         //Results in O Winning
-        else if (win() == -1)
+        else if (win(m.positionsTemp) == -1)
         {
             return -10;
         }
 
         //Results in Draw or Nothing Happening
-        else if (win() == 0)
+        else if (win(m.positionsTemp) == 0)
         {
             return 0;
         }
@@ -122,8 +289,8 @@ public class TicTacToeLogic : MonoBehaviour
         else
             return 0;
     }
-
-    public int win(/*Move m*/)
+    /*
+   public int win(Move m)
     {
         // Horizontal X Wins
         if (positions[(int)TicTacToe.Top_Left] == 0 && positions[(int)TicTacToe.Top_Middle] == 0 && positions[(int)TicTacToe.Top_Right] == 0)
@@ -184,17 +351,162 @@ public class TicTacToeLogic : MonoBehaviour
         
         else return 0;
     }
+    */
 
-    //if (chance <= probability)
-    //     this.GetComponent<Image>().sprite = safe;
+    public static int win(int[] pos)
+    {
+        // Horizontal X Wins
+        if (pos[(int)TicTacToe.Top_Left] == 0 && pos[(int)TicTacToe.Top_Middle] == 0 && pos[(int)TicTacToe.Top_Right] == 0)
+            return 1;
 
-    // else
-    //     this.GetComponent<Image>().sprite = dead;
+        else if (pos[(int)TicTacToe.Middle_Left] == 0 && pos[(int)TicTacToe.Middle_Middle] == 0 && pos[(int)TicTacToe.Middle_Right] == 0)
+            return 1;
+
+        else if (pos[(int)TicTacToe.Bottom_Left] == 0 && pos[(int)TicTacToe.Bottom_Middle] == 0 && pos[(int)TicTacToe.Bottom_Right] == 0)
+            return 1;
+
+        // Diagonal X Wins
+        else if (pos[(int)TicTacToe.Top_Left] == 0 && pos[(int)TicTacToe.Middle_Middle] == 0 && pos[(int)TicTacToe.Bottom_Right] == 0)
+            return 1;
+
+        else if (pos[(int)TicTacToe.Top_Right] == 0 && pos[(int)TicTacToe.Middle_Middle] == 0 && pos[(int)TicTacToe.Bottom_Left] == 0)
+            return 1;
 
 
-    //Debug.Log(dead);
-    // Debug.Log(gameObject.GetComponent<Image>()); 
-    //this.GetComponent<Image>().sprite = dead;
+        // Vertical X Wins
+        else if (pos[(int)TicTacToe.Top_Left] == 0 && pos[(int)TicTacToe.Middle_Left] == 0 && pos[(int)TicTacToe.Bottom_Left] == 0)
+            return 1;
+
+        else if (pos[(int)TicTacToe.Top_Middle] == 0 && pos[(int)TicTacToe.Middle_Middle] == 0 && pos[(int)TicTacToe.Bottom_Middle] == 0)
+            return 1;
+
+        else if (pos[(int)TicTacToe.Top_Right] == 0 && pos[(int)TicTacToe.Middle_Right] == 0 && pos[(int)TicTacToe.Bottom_Right] == 0)
+            return 1;
+
+        // Horizontal O Wins
+        else if (pos[(int)TicTacToe.Top_Left] == 1 && pos[(int)TicTacToe.Top_Middle] == 1 && pos[(int)TicTacToe.Top_Right] == 1)
+            return -1;
+
+        else if (pos[(int)TicTacToe.Middle_Left] == 1 && pos[(int)TicTacToe.Middle_Middle] == 1 && pos[(int)TicTacToe.Middle_Right] == 1)
+            return -1;
+
+        else if (pos[(int)TicTacToe.Bottom_Left] == 1 && pos[(int)TicTacToe.Bottom_Middle] == 1 && pos[(int)TicTacToe.Bottom_Right] == 1)
+            return -1;
+
+        // Diagonal O Wins
+        else if (pos[(int)TicTacToe.Top_Left] == 1 && pos[(int)TicTacToe.Middle_Middle] == 1 && pos[(int)TicTacToe.Bottom_Right] == 1)
+            return -1;
+
+        else if (pos[(int)TicTacToe.Top_Right] == 1 && pos[(int)TicTacToe.Middle_Middle] == 1 && pos[(int)TicTacToe.Bottom_Left] == 1)
+            return -1;
+
+
+        // Vertical O Wins
+        else if (pos[(int)TicTacToe.Top_Left] == 1 && pos[(int)TicTacToe.Middle_Left] == 1 && pos[(int)TicTacToe.Bottom_Left] == 1)
+            return -1;
+
+        else if (pos[(int)TicTacToe.Top_Middle] == 1 && pos[(int)TicTacToe.Middle_Middle] == 1 && pos[(int)TicTacToe.Bottom_Middle] == 1)
+            return -1;
+
+        else if (pos[(int)TicTacToe.Top_Right] == 1 && pos[(int)TicTacToe.Middle_Right] == 1 && pos[(int)TicTacToe.Bottom_Right] == 1)
+            return -1;
+
+
+        else return 0;
+    }
+
+    public void aiAction()
+    {
+        Move ai = new Move(positions, true, 0);
+        Move nextAiMove = ai.getWinningMove();
+        int changedBoardIndex = nextAiMove.changedIndex;
+
+        if (XO)
+        {
+            positions[changedBoardIndex] = 0;
+        }
+
+        else
+        {
+            positions[changedBoardIndex] = 1;
+        }
+
+        GameObject g = null;
+        if (XO) //AI = X
+        {
+            switch (changedBoardIndex)
+            {
+                case 0:
+                    g = GameObject.FindGameObjectWithTag("TopLeft");
+                    break;
+                case 1:
+                    g = GameObject.FindGameObjectWithTag("TopMiddle");
+                    break;
+                case 2:
+                    g = GameObject.FindGameObjectWithTag("TopRight");
+                    break;
+                case 3:
+                    g = GameObject.FindGameObjectWithTag("MiddleLeft");
+                    break;
+                case 4:
+                    g = GameObject.FindGameObjectWithTag("MiddleMiddle");
+                    break;
+                case 5:
+                    g = GameObject.FindGameObjectWithTag("MiddleRight");
+                    break;
+                case 6:
+                    g = GameObject.FindGameObjectWithTag("BottomLeft");
+                    break;
+                case 7:
+                    g = GameObject.FindGameObjectWithTag("BottomMiddle");
+                    break;
+                case 8:
+                    g = GameObject.FindGameObjectWithTag("BottomRight");
+                    break;
+            }
+
+            g.GetComponent<Image>().sprite = RedX;
+            g.GetComponent<Image>().color = red;
+        }
+
+
+        if (!XO) //AI = O
+        {
+            switch (changedBoardIndex)
+            {
+                case 0:
+                    g = GameObject.FindGameObjectWithTag("TopLeft");
+                    break;
+                case 1:
+                    g = GameObject.FindGameObjectWithTag("TopMiddle");
+                    break;
+                case 2:
+                    g = GameObject.FindGameObjectWithTag("TopRight");
+                    break;
+                case 3:
+                    g = GameObject.FindGameObjectWithTag("MiddleLeft");
+                    break;
+                case 4:
+                    g = GameObject.FindGameObjectWithTag("MiddleMiddle");
+                    break;
+                case 5:
+                    g = GameObject.FindGameObjectWithTag("MiddleRight");
+                    break;
+                case 6:
+                    g = GameObject.FindGameObjectWithTag("BottomLeft");
+                    break;
+                case 7:
+                    g = GameObject.FindGameObjectWithTag("BottomMiddle");
+                    break;
+                case 8:
+                    g = GameObject.FindGameObjectWithTag("BottomRight");
+                    break;
+            }
+
+            g.GetComponent<Image>().sprite = RedO;
+            g.GetComponent<Image>().color = red;
+        }
+    }
 }
 
 

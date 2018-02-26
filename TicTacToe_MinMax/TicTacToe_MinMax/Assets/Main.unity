@@ -464,6 +464,7 @@ MonoBehaviour:
   RedO: {fileID: 21300000, guid: e98f249074e8eb340a1df58c9330ba98, type: 3}
   BlueX: {fileID: 21300000, guid: ca8ce3906566c2c4d945cb124cbe4403, type: 3}
   BlueO: {fileID: 21300000, guid: 69f27f594b1c1fd499b1df2733fcb004, type: 3}
+  winText: {fileID: 1679202053}
   ScriptObject: {fileID: 1768589582}
 --- !u!1 &205216040
 GameObject:
@@ -892,6 +893,7 @@ MonoBehaviour:
   RedO: {fileID: 21300000, guid: e98f249074e8eb340a1df58c9330ba98, type: 3}
   BlueX: {fileID: 21300000, guid: ca8ce3906566c2c4d945cb124cbe4403, type: 3}
   BlueO: {fileID: 21300000, guid: 69f27f594b1c1fd499b1df2733fcb004, type: 3}
+  winText: {fileID: 1679202053}
   ScriptObject: {fileID: 1768589582}
 --- !u!1 &369053058
 GameObject:
@@ -1249,6 +1251,7 @@ MonoBehaviour:
   RedO: {fileID: 21300000, guid: e98f249074e8eb340a1df58c9330ba98, type: 3}
   BlueX: {fileID: 21300000, guid: ca8ce3906566c2c4d945cb124cbe4403, type: 3}
   BlueO: {fileID: 21300000, guid: 69f27f594b1c1fd499b1df2733fcb004, type: 3}
+  winText: {fileID: 1679202053}
   ScriptObject: {fileID: 1768589582}
 --- !u!1 &445020655
 GameObject:
@@ -2011,6 +2014,7 @@ MonoBehaviour:
   RedO: {fileID: 21300000, guid: e98f249074e8eb340a1df58c9330ba98, type: 3}
   BlueX: {fileID: 21300000, guid: ca8ce3906566c2c4d945cb124cbe4403, type: 3}
   BlueO: {fileID: 21300000, guid: 69f27f594b1c1fd499b1df2733fcb004, type: 3}
+  winText: {fileID: 1679202053}
   ScriptObject: {fileID: 1768589582}
 --- !u!1 &716380976
 GameObject:
@@ -2150,6 +2154,7 @@ MonoBehaviour:
   RedO: {fileID: 21300000, guid: e98f249074e8eb340a1df58c9330ba98, type: 3}
   BlueX: {fileID: 21300000, guid: ca8ce3906566c2c4d945cb124cbe4403, type: 3}
   BlueO: {fileID: 21300000, guid: 69f27f594b1c1fd499b1df2733fcb004, type: 3}
+  winText: {fileID: 1679202053}
   ScriptObject: {fileID: 1768589582}
 --- !u!1 &733424142
 GameObject:
@@ -2289,6 +2294,7 @@ MonoBehaviour:
   RedO: {fileID: 21300000, guid: e98f249074e8eb340a1df58c9330ba98, type: 3}
   BlueX: {fileID: 21300000, guid: ca8ce3906566c2c4d945cb124cbe4403, type: 3}
   BlueO: {fileID: 21300000, guid: 69f27f594b1c1fd499b1df2733fcb004, type: 3}
+  winText: {fileID: 1679202053}
   ScriptObject: {fileID: 1768589582}
 --- !u!1 &738049145
 GameObject:
@@ -6316,6 +6322,7 @@ MonoBehaviour:
   RedO: {fileID: 21300000, guid: e98f249074e8eb340a1df58c9330ba98, type: 3}
   BlueX: {fileID: 21300000, guid: ca8ce3906566c2c4d945cb124cbe4403, type: 3}
   BlueO: {fileID: 21300000, guid: 69f27f594b1c1fd499b1df2733fcb004, type: 3}
+  winText: {fileID: 1679202053}
   ScriptObject: {fileID: 1768589582}
 --- !u!1 &1149331417
 GameObject:
@@ -6830,10 +6837,10 @@ AudioSource:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1332268637}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 5412e72916ee0124099677d21d38fe42, type: 3}
+  m_audioClip: {fileID: 8300000, guid: a06f8d6bfcb4e4c48b9fa2ebc97b89f3, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.5
   m_Pitch: 1
@@ -7872,6 +7879,7 @@ MonoBehaviour:
   RedO: {fileID: 21300000, guid: e98f249074e8eb340a1df58c9330ba98, type: 3}
   BlueX: {fileID: 21300000, guid: ca8ce3906566c2c4d945cb124cbe4403, type: 3}
   BlueO: {fileID: 21300000, guid: 69f27f594b1c1fd499b1df2733fcb004, type: 3}
+  winText: {fileID: 1679202053}
   ScriptObject: {fileID: 1768589582}
 --- !u!1 &1622130688
 GameObject:
@@ -8082,7 +8090,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: X Wins!
+  m_Text: '
+
+'
 --- !u!222 &1679202054
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -8374,6 +8384,7 @@ MonoBehaviour:
   RedO: {fileID: 21300000, guid: e98f249074e8eb340a1df58c9330ba98, type: 3}
   BlueX: {fileID: 21300000, guid: ca8ce3906566c2c4d945cb124cbe4403, type: 3}
   BlueO: {fileID: 21300000, guid: 69f27f594b1c1fd499b1df2733fcb004, type: 3}
+  winText: {fileID: 1679202053}
   ScriptObject: {fileID: 1768589582}
 --- !u!1 &1762112176
 GameObject:
@@ -8473,8 +8484,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 014479f16445e4c49bf691329ba2c35a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  RedX: {fileID: 21300000, guid: 18e1125eaa15a6642b3422b2931f58e3, type: 3}
+  RedO: {fileID: 21300000, guid: e98f249074e8eb340a1df58c9330ba98, type: 3}
+  BlueX: {fileID: 21300000, guid: ca8ce3906566c2c4d945cb124cbe4403, type: 3}
+  BlueO: {fileID: 21300000, guid: 69f27f594b1c1fd499b1df2733fcb004, type: 3}
   positions: ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
-  XO: 0
   playerTurn: 0
   placementParticle: {fileID: 0}
 --- !u!4 &1768589584
@@ -8919,8 +8933,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 014479f16445e4c49bf691329ba2c35a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  RedX: {fileID: 0}
+  RedO: {fileID: 0}
+  BlueX: {fileID: 0}
+  BlueO: {fileID: 0}
   positions: ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
-  XO: 0
   playerTurn: 0
   placementParticle: {fileID: 0}
 --- !u!199 &1957096888
