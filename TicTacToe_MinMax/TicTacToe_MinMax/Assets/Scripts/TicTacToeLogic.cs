@@ -34,6 +34,9 @@ public class Move
 
     private int score = 0;
 
+    private int alpha = 0;
+    private int beta = 0;
+
     private int depth = 0;
 
     public int[] positionsTemp = { 0 };
@@ -96,7 +99,7 @@ public class Move
                         if (positionsTemp[i] == -1) //If the space is empty
                         {
                             int[] positionsToSend = new int[9];
-                            System.Array.Copy(positionsTemp, positionsToSend, 9); 
+                            System.Array.Copy(positionsTemp, positionsToSend, 9);
 
                             // False = Player X, 
                             // True = Player O 
@@ -107,7 +110,7 @@ public class Move
                             //Checks if the CPU is a X or O player to determine what to place in positions[]
                             if (TicTacToeLogic.XO)
                             {
-                         
+
                                 if (minMax)
                                 {
                                     positionsToSend[i] = 0;
@@ -119,7 +122,7 @@ public class Move
                                 }
                             }
 
-                            else 
+                            else
                             {
 
                                 if (minMax)
@@ -132,10 +135,14 @@ public class Move
                                     positionsToSend[i] = 0;
                                 }
                             }
-                            //Creates a new move/node with a new positions[], flipped minMax for the next layer and a depth of +1 as it is going deeper.
-                            Move tempMove = new Move(positionsToSend, !minMax, depth+1);
-                            tempMove.changedIndex = i;
-                            boardStates.Add(tempMove);
+
+          
+                            
+                             //Creates a new move/node with a new positions[], flipped minMax for the next layer and a depth of +1 as it is going deeper.
+                             Move tempMove = new Move(positionsToSend, !minMax, depth + 1);
+                             tempMove.changedIndex = i;
+                             boardStates.Add(tempMove);
+                            
                         }
                     }
                     //Assigns the move with the most value to winningMode.
@@ -337,13 +344,14 @@ public class TicTacToeLogic : MonoBehaviour
     //Function that is called when it is the AI's turn.
     //Creates a root move node and then after the tree is built,
     //executes the winning move which is the move with the highest score.
+    //Places either a Red X or Red O
     public void aiAction()
     {
         Move ai = new Move(positions, true, 0);
         Move nextAiMove = ai.getWinningMove();
         int changedBoardIndex = nextAiMove.changedIndex;
 
-        // If statments that determine the actual move chosen by the AI should be an X or O 
+        // If statements that determine the actual move chosen by the AI should be an X or O 
         //and reflects that in the positions[].
         if (XO)
         {
