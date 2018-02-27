@@ -4,20 +4,22 @@ using UnityEngine;
 using System.IO;
 using UnityEngine.UI;
 using System;
+using System.Diagnostics;
 
 public class Space : MonoBehaviour
 {
     //Sprite Images of the various Moves
     public Sprite RedX;
     public Sprite RedO;
-
     public Sprite BlueX;
     public Sprite BlueO;
 
+    //Reference to UI Text to declare winner
     public Text winText;
 
     public GameObject ScriptObject;
     private TicTacToeLogic logicScript;
+    public ParticleSystem particleToPlay;
 
     private Color blue = Color.blue;
     private Color red = Color.red;
@@ -32,18 +34,46 @@ public class Space : MonoBehaviour
     // Update is called once per frame
     void Update ()
     {
-		
-	}
+        //Win condition checks
+        if (TicTacToeLogic.win(logicScript.positions) == 1)
+        {
+            winText.text = "X Wins!";
+            logicScript.playerTurn = false;
+            logicScript.gameStart = false;
+        }
+
+        else if (TicTacToeLogic.win(logicScript.positions) == -1)
+        {
+            winText.text = "O Wins!";
+            logicScript.playerTurn = false;
+            logicScript.gameStart = false;
+        }
+
+        else if (TicTacToeLogic.isDraw(logicScript.positions))
+        {
+            winText.text = "It's a Draw!";
+            logicScript.playerTurn = false;
+            logicScript.gameStart = false;
+        }
+    }
 
     void LateUpdate()
     {
+        //Check to see if it is the player's turn and if the game has started yet.
+        //If true, let the AI player take the turn.
         if (logicScript.playerTurn == false && logicScript.gameStart == true)
         {
+            Stopwatch timer = new Stopwatch();
+            timer.Start();
             logicScript.aiAction();
+            timer.Stop();
+            UnityEngine.Debug.Log("Run Time of AI Function " + timer.ElapsedMilliseconds + "ms");
             logicScript.playerTurn = true;
         }
     }
 
+    //Function called on board position click that determines what to display
+    // and also updates the logic for the board in the positions[]
     public void click()
     {
         if(logicScript.playerTurn == true)
@@ -155,17 +185,7 @@ public class Space : MonoBehaviour
                 logicScript.playerTurn = false;
             }
 
-
-
-            if (TicTacToeLogic.win(logicScript.positions) == 1)
-            {
-                winText.text = "X Wins!";
-            }
-
-            else if (TicTacToeLogic.win(logicScript.positions) == -1)
-            {
-                winText.text = "O Wins!";
-            }
+            particleToPlay.Play();
         }
     }
 }
